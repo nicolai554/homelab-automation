@@ -1,0 +1,34 @@
+## Objective
+Configure a service account with restricted sudo privileges for automated service restarts.
+
+## Configuration
+
+### Sudoers Entry
+```
+deploy-bot ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart testapp.service
+```
+
+## Testing Results
+```bash
+#  Allowed operation (no password required)
+deploy-bot@rhcsa:~$ sudo systemctl restart testapp.service
+deploy-bot@rhcsa:~$ echo $?
+0
+
+#  Blocked: Root escalation
+deploy-bot@rhcsa:~$ sudo su -
+Sorry, user deploy-bot is not allowed to execute '/bin/su -' as root
+
+#  Blocked: Different service
+deploy-bot@rhcsa:~$ sudo systemctl restart sshd
+Sorry, user deploy-bot is not allowed to execute '/bin/systemctl restart sshd' as root
+```
+
+## Security Principles
+- Least privilege access
+- No password storage for automation
+- Command path restriction prevents attacks
+- Limited blast radius on account compromise
+
+**Date:** February 13, 2025
+EOF
