@@ -46,3 +46,12 @@ sysctl -w net.ipv4.ip_forward=1
 Confirm exit node in tailscale admin console.
 
 Voila.
+
+You may get error DP GRO forwarding is suboptimally configured on eth0, UDP forwarding throughput capability will increase with a configuration change.
+
+See https://tailscale.com/s/ethtool-config-udp-gro
+
+To fix this, install ethtool and run the below command
+
+sudo apt update && sudo apt install ethtool -y
+sudo ethtool -K eth0 rx-udp-gro-forwarding on rx-gro on
