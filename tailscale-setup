@@ -1,0 +1,47 @@
+Open your host in proxmox
+
+Find storage you want to put the LXC in. usually local. Click CT templates. Click Templates. Sort by package. Choose debian 12. Create CT. HostName and set ID, set password. Set debian as template. 4 cores is fine 8 GB memory is fine. Set IP to DHCP, doesn't matter. finish. 
+
+
+Once installed and you have your LXC, go back to shell and edit this config file with the follow lines using vim or vi:
+
+Config File:  /etc/pve/lxc/[ID of LXC].conf
+Add this to the end of the file:  lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
+
+Then type pct start [ID of LXC]
+
+Go to tailscale node and run the following:
+
+curl -fsSL https://tailscale.com/install.sh | sh
+
+Confirm it is now in your tailscale dashboard
+
+Now we set it up as exit node.
+
+Since its debian and has /etc/sysctl.d run the following:
+
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+
+
+Then 
+
+Check your home network range. You can do so by :
+ip route | grep default
+
+If you IP is 192.168.69.x then your range is 192.169.0/24.
+
+Now run 
+
+tailscale up --advertise-exit-node --advertise-routes=192.168.68.0/24 --reset
+
+Forward packets using
+
+
+sysctl -w net.ipv4.ip_forward=1
+
+Confirm exit node in tailscale admin console.
+
+Voila.
