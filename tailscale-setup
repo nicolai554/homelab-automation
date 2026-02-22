@@ -1,6 +1,7 @@
 Open your host in proxmox
 
-Find storage you want to put the LXC in. usually local. Click CT templates. Click Templates. Sort by package. Choose debian 12. Create CT. HostName and set ID, set password. Set debian as template. 4 cores is fine 8 GB memory is fine. Set IP to DHCP, doesn't matter. finish. 
+Find storage you want to put the LXC in. usually local. Click CT templates. Click Templates. Sort by package. Choose debian 12. Create CT. HostName and set ID, set password. 
+Set debian as template. 4 cores is fine 8 GB memory is fine. Set IP to DHCP, doesn't matter. finish. 
 
 
 Once installed and you have your LXC, go back to shell and edit this config file with the follow lines using vim or vi:
